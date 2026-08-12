@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS posts (
         REFERENCES users(id)
         ON DELETE CASCADE,
 
-    content VARCHAR(500) NOT NULL,
+    content VARCHAR(500),
 
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -105,6 +105,32 @@ CREATE TABLE IF NOT EXISTS comments (
 
 
 -- ============================================================
+-- VIDEOS
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS videos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    post_id UUID NOT NULL UNIQUE
+        REFERENCES posts(id)
+        ON DELETE CASCADE,
+
+    original_filename VARCHAR(255) NOT NULL,
+    filen_file_id TEXT NOT NULL,
+    filen_path TEXT,
+
+    mime_type VARCHAR(50) DEFAULT 'video/mp4',
+    file_size BIGINT NOT NULL,
+    duration DECIMAL(10, 2),
+
+    width INTEGER,
+    height INTEGER,
+
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+
+-- ============================================================
 -- INDEXES
 -- ============================================================
 
@@ -127,6 +153,10 @@ ON followers(follower_id);
 -- Makes finding comments on a post faster
 CREATE INDEX IF NOT EXISTS comments_post_id_idx
 ON comments(post_id);
+
+-- Makes finding videos by post faster
+CREATE INDEX IF NOT EXISTS videos_post_id_idx
+ON videos(post_id);
 
 
 -- ============================================================

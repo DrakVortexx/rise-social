@@ -2,14 +2,32 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
+const path = require("path");
 const pool = require("./src/db/database");
 
 const authRoutes = require("./src/routes/auth");
 const postRoutes = require("./src/routes/posts");
+const userRoutes = require("./src/routes/users");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+// Configure multer for file uploads
+const upload = multer({
+  dest: path.join(__dirname, "uploads"),
+  limits: {
+    fileSize: 100 * 1024 * 1024, // 100 MB
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("video/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only video files are allowed"));
+    }
+  },
+});
 
 app.use(
   cors({
@@ -65,7 +83,10 @@ app.use("/api/auth", authRoutes);
 // POSTS
 // ------------------------------------------------------------
 
-app.use("/api/posts", postRoutes);
+app.use("/api/posts", postRoutes(upload));
+
+// USERS
+app.use("/api/users", userRoutes);
 
 // ------------------------------------------------------------
 // 404
