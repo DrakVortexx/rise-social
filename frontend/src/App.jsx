@@ -1,192 +1,298 @@
+import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {
-  Home,
-  Search,
-  Bell,
-  User,
-  Plus,
-  Heart,
-  MessageCircle,
-  Repeat2,
-} from "lucide-react";
+import { signup, login } from "./api";
 import "./App.css";
 
-const posts = [
-  {
-    id: 1,
-    user: "Alex",
-    handle: "@alex",
-    avatar: "A",
-    text: "Just joined RISE 🚀 What should I post first?",
-    likes: 128,
-    comments: 14,
-  },
-  {
-    id: 2,
-    user: "Nova",
-    handle: "@nova",
-    avatar: "N",
-    text: "The fastest-growing creators are showing up on RISE 🔥",
-    likes: 542,
-    comments: 37,
-  },
-];
+function AuthLayout({ children }) {
+  return (
+    <div className="auth-page">
+      <div className="auth-brand">
+        <div className="brand-logo">RISE</div>
+        <h1>Build your audience.</h1>
+        <p>Share. Connect. Grow.</p>
+      </div>
 
-function App() {
-  const [liked, setLiked] = useState({});
+      <div className="auth-card">
+        {children}
+      </div>
+    </div>
+  );
+}
 
-  const toggleLike = (id) => {
-    setLiked((current) => ({
-      ...current,
-      [id]: !current[id],
-    }));
-  };
+function Login() {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const form = new FormData(event.currentTarget);
+
+    const email = form.get("email");
+    const password = form.get("password");
+
+    setError("");
+    setLoading(true);
+
+    try {
+      const data = await login({
+        email,
+        password,
+      });
+
+      localStorage.setItem("rise_token", data.token);
+      localStorage.setItem("rise_user", JSON.stringify(data.user));
+
+      navigate("/home");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
-    <div className="app">
-      <header className="topbar">
-        <div className="logo">RISE</div>
+    <AuthLayout>
+      <h2>Welcome back</h2>
+      <p className="auth-subtitle">
+        Log in to your RISE account.
+      </p>
 
-        <div className="search">
-          <Search size={18} />
-          <input placeholder="Search RISE" />
-        </div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="email">Email</label>
 
-        <div className="top-actions">
-          <button>
-            <Bell size={20} />
-          </button>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          autoComplete="email"
+          required
+        />
 
-          <button className="profile-button">
-            <User size={18} />
-            <span>Profile</span>
-          </button>
+        <label htmlFor="password">Password</label>
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Your password"
+          autoComplete="current-password"
+          required
+        />
+
+        {error && <div className="error">{error}</div>}
+
+        <button
+          type="submit"
+          className="primary-button"
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Log in"}
+        </button>
+      </form>
+
+      <p className="switch-auth">
+        Don't have an account?{" "}
+        <Link to="/signup">Create one</Link>
+      </p>
+    </AuthLayout>
+  );
+}
+
+function Signup() {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const form = new FormData(event.currentTarget);
+
+    const displayName = form.get("displayName");
+    const username = form.get("username");
+    const email = form.get("email");
+    const password = form.get("password");
+
+    setError("");
+    setLoading(true);
+
+    try {
+      const data = await signup({
+        displayName,
+        username,
+        email,
+        password,
+      });
+
+      localStorage.setItem("rise_token", data.token);
+      localStorage.setItem("rise_user", JSON.stringify(data.user));
+
+      navigate("/home");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <AuthLayout>
+      <h2>Create your account</h2>
+
+      <p className="auth-subtitle">
+        Join RISE and start growing.
+      </p>
+
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="displayName">Display name</label>
+
+        <input
+          id="displayName"
+          name="displayName"
+          type="text"
+          placeholder="Your name"
+          autoComplete="name"
+          required
+        />
+
+        <label htmlFor="username">Username</label>
+
+        <input
+          id="username"
+          name="username"
+          type="text"
+          placeholder="@username"
+          minLength="3"
+          maxLength="30"
+          autoComplete="username"
+          required
+        />
+
+        <label htmlFor="email">Email</label>
+
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          autoComplete="email"
+          required
+        />
+
+        <label htmlFor="password">Password</label>
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="At least 8 characters"
+          minLength="8"
+          autoComplete="new-password"
+          required
+        />
+
+        {error && <div className="error">{error}</div>}
+
+        <button
+          type="submit"
+          className="primary-button"
+          disabled={loading}
+        >
+          {loading ? "Creating account..." : "Create account"}
+        </button>
+      </form>
+
+      <p className="switch-auth">
+        Already have an account?{" "}
+        <Link to="/login">Log in</Link>
+      </p>
+    </AuthLayout>
+  );
+}
+
+function Home() {
+  const navigate = useNavigate();
+
+  const user = JSON.parse(
+    localStorage.getItem("rise_user") || "null"
+  );
+
+  function logout() {
+    localStorage.removeItem("rise_token");
+    localStorage.removeItem("rise_user");
+    navigate("/login");
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <div className="home-page">
+      <header className="home-header">
+        <div className="brand-logo">RISE</div>
+
+        <div className="home-user">
+          <span>{user.display_name}</span>
+          <button onClick={logout}>Log out</button>
         </div>
       </header>
 
-      <div className="layout">
-        <aside className="sidebar">
-          <nav>
-            <a className="active">
-              <Home size={20} />
-              Home
-            </a>
-
-            <a>
-              <Search size={20} />
-              Explore
-            </a>
-
-            <a>
-              <Bell size={20} />
-              Notifications
-            </a>
-
-            <a>
-              <User size={20} />
-              Profile
-            </a>
-          </nav>
-
-          <button className="create-button">
-            <Plus size={20} />
-            Create Post
-          </button>
-        </aside>
-
-        <main className="feed">
-          <div className="feed-header">
-            <div>
-              <h1>Home</h1>
-              <p>See what people are posting on RISE.</p>
-            </div>
+      <main className="home-content">
+        <div className="welcome-card">
+          <div className="avatar">
+            {user.display_name.charAt(0).toUpperCase()}
           </div>
 
-          <div className="composer">
-            <div className="avatar">D</div>
+          <div>
+            <h1>
+              Welcome to RISE, {user.display_name} 👋
+            </h1>
 
-            <div className="composer-content">
-              <textarea placeholder="What's happening?" />
-
-              <div className="composer-bottom">
-                <span>Share something with your followers.</span>
-                <button>Post</button>
-              </div>
-            </div>
+            <p>@{user.username}</p>
           </div>
+        </div>
 
-          {posts.map((post) => (
-            <article className="post" key={post.id}>
-              <div className="post-header">
-                <div className="avatar">{post.avatar}</div>
+        <div className="coming-soon">
+          <h2>Your feed is coming next 🚀</h2>
 
-                <div>
-                  <strong>{post.user}</strong>
-                  <span>{post.handle}</span>
-                </div>
-              </div>
-
-              <p className="post-text">{post.text}</p>
-
-              <div className="post-actions">
-                <button
-                  className={liked[post.id] ? "liked" : ""}
-                  onClick={() => toggleLike(post.id)}
-                >
-                  <Heart
-                    size={19}
-                    fill={liked[post.id] ? "currentColor" : "none"}
-                  />
-                  {post.likes + (liked[post.id] ? 1 : 0)}
-                </button>
-
-                <button>
-                  <MessageCircle size={19} />
-                  {post.comments}
-                </button>
-
-                <button>
-                  <Repeat2 size={19} />
-                  Share
-                </button>
-              </div>
-            </article>
-          ))}
-        </main>
-
-        <aside className="rightbar">
-          <div className="card">
-            <h2>🔥 Trending Creators</h2>
-
-            <div className="creator">
-              <div className="avatar">N</div>
-              <div>
-                <strong>Nova</strong>
-                <span>@nova</span>
-              </div>
-              <button>Follow</button>
-            </div>
-
-            <div className="creator">
-              <div className="avatar">A</div>
-              <div>
-                <strong>Alex</strong>
-                <span>@alex</span>
-              </div>
-              <button>Follow</button>
-            </div>
-
-            <a className="see-more">See more</a>
-          </div>
-
-          <div className="card">
-            <h2>📈 Your Growth</h2>
-            <div className="growth-number">+0</div>
-            <p>followers this week</p>
-          </div>
-        </aside>
-      </div>
+          <p>
+            Your account is real and connected to the RISE database.
+          </p>
+        </div>
+      </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/home" replace />}
+        />
+
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
+
+        <Route
+          path="/home"
+          element={<Home />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
