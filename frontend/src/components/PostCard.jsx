@@ -1,4 +1,5 @@
-import { Link, useEffect, useState } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Avatar } from "./Avatar";
 import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
