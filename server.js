@@ -67,7 +67,7 @@ class HttpError extends Error {
 
 const POST_SELECT = `
   SELECT p.id, p.text, p.image, p.created_at,
-    u.id AS author_id, u.username AS author_username, u.age_group AS author_age_group,
+    u.id AS author_id, u.username AS author_username,
     (SELECT COUNT(*)::int FROM likes l WHERE l.post_id = p.id) AS like_count,
     (SELECT COUNT(*)::int FROM likes l WHERE l.post_id = p.id AND l.user_id = $1) AS liked
   FROM posts p
@@ -144,7 +144,6 @@ function mapUser(row) {
   return {
     id: row.id,
     username: row.username,
-    ageGroup: row.age_group,
     bio: row.bio,
     createdAt: row.created_at,
     postCount: row.post_count,
@@ -155,7 +154,7 @@ function mapUser(row) {
 
 async function loadUserById(id) {
   const result = await pool.query(`
-    SELECT u.id, u.username, u.age_group, u.bio, u.created_at,
+    SELECT u.id, u.username, u.bio, u.created_at,
       (SELECT COUNT(*)::int FROM posts p WHERE p.user_id = u.id) AS post_count,
       (SELECT COUNT(*)::int FROM fans f WHERE f.following_id = u.id) AS fan_count,
       (SELECT COUNT(*)::int FROM fans f WHERE f.follower_id = u.id) AS following_count
@@ -174,8 +173,7 @@ function mapPost(row) {
     liked: Boolean(row.liked),
     author: {
       id: row.author_id,
-      username: row.author_username,
-      ageGroup: row.author_age_group
+      username: row.author_username
     }
   };
 }
@@ -230,7 +228,7 @@ async function requireUser(req) {
     throw new HttpError(401, 'Your session expired. Please log in again.');
   }
   const userResult = await pool.query(
-    'SELECT id, username, age_group, bio, created_at FROM users WHERE id = $1',
+    'SELECT id, username, bio, created_at FROM users WHERE id = $1',
     [session.user_id]
   );
   if (!userResult.rows[0]) throw new HttpError(401, 'Please log in.');
@@ -327,7 +325,6 @@ async function handleSignup(req, res) {
   const body = await readJson(req);
   const username = typeof body.username === 'string' ? body.username.trim() : '';
   const password = typeof body.password === 'string' ? body.password : '';
-  const ageGroup = ['kid', 'teen', 'adult'].indexOf(body.ageGroup) !== -1 ? body.ageGroup : 'adult';
 
   if (!/^[A-Za-z0-9_]{3,20}$/.test(username)) {
     throw new HttpError(400, 'Username must be 3-20 letters, numbers, or underscores.');
@@ -342,8 +339,8 @@ async function handleSignup(req, res) {
   let userId;
   try {
     const result = await pool.query(
-      'INSERT INTO users (username, password_hash, age_group, bio, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-      [username, hashPassword(password), ageGroup, '', Date.now()]
+      'INSERT INTO users (username, password_hash, bio, created_at) VALUES ($1, $2, $3, $4) RETURNING id',
+      [username, hashPassword(password), '', Date.now()]
     );
     userId = result.rows[0].id;
   } catch (error) {
@@ -382,7 +379,7 @@ async function handleLogout(req, res) {
 
 async function handleUpdateMe(req, res, user) {
   const body = await readJson(req);
-  const currentResult = await pool.query('SELECT bio, age_group FROM users WHERE id = $1', [user.id]);
+  const currentResult = await pool.query('SELECT bio FROM users WHERE id = $1', [user.id]);
   const current = currentResult.rows[0];
 
   let bio = current.bio;
@@ -392,15 +389,7 @@ async function handleUpdateMe(req, res, user) {
     if (bio.length > 160) throw new HttpError(400, 'Bio can be up to 160 characters.');
   }
 
-  let ageGroup = current.age_group;
-  if (body.ageGroup !== undefined) {
-    if (['kid', 'teen', 'adult'].indexOf(body.ageGroup) === -1) {
-      throw new HttpError(400, 'Choose kid, teen, or adult.');
-    }
-    ageGroup = body.ageGroup;
-  }
-
-  await pool.query('UPDATE users SET bio = $1, age_group = $2 WHERE id = $3', [bio, ageGroup, user.id]);
+  await pool.query('UPDATE users SET bio = $1 WHERE id = $2', [bio, user.id]);
   sendJson(res, 200, { user: await loadUserById(user.id) });
 }
 
@@ -418,7 +407,7 @@ async function handleFeed(req, res, user, url) {
 async function handleDiscover(req, res, user, url) {
   const result = await listPosts('1 = 1', [], user.id, url.searchParams.get('before'), 15);
   const peopleResult = await pool.query(`
-    SELECT u.id, u.username, u.age_group, u.bio, u.created_at,
+    SELECT u.id, u.username, u.bio, u.created_at,
       (SELECT COUNT(*)::int FROM fans f WHERE f.following_id = u.id) AS fan_count,
       EXISTS(SELECT 1 FROM fans f WHERE f.follower_id = $1 AND f.following_id = u.id) AS is_fan
     FROM users u
@@ -437,7 +426,7 @@ async function handleUserProfile(req, res, user, username) {
   if (!target) throw new HttpError(404, 'User not found.');
 
   const result = await pool.query(`
-    SELECT u.id, u.username, u.age_group, u.bio, u.created_at,
+    SELECT u.id, u.username, u.bio, u.created_at,
       (SELECT COUNT(*)::int FROM posts p WHERE p.user_id = u.id) AS post_count,
       (SELECT COUNT(*)::int FROM fans f WHERE f.following_id = u.id) AS fan_count,
       (SELECT COUNT(*)::int FROM fans f WHERE f.follower_id = u.id) AS following_count,
@@ -517,7 +506,7 @@ async function handleFanList(req, res, user, username, kind) {
   if (!target) throw new HttpError(404, 'User not found.');
 
   const base = `
-    SELECT u.id, u.username, u.age_group, u.bio, u.created_at,
+    SELECT u.id, u.username, u.bio, u.created_at,
       (SELECT COUNT(*)::int FROM fans f2 WHERE f2.following_id = u.id) AS fan_count,
       EXISTS(SELECT 1 FROM fans f2 WHERE f2.follower_id = $1 AND f2.following_id = u.id) AS is_fan
     FROM fans f
@@ -545,7 +534,7 @@ async function handleSearch(req, res, user, url) {
 
   const pattern = likePattern(query);
   const usersResult = await pool.query(`
-    SELECT u.id, u.username, u.age_group, u.bio, u.created_at,
+    SELECT u.id, u.username, u.bio, u.created_at,
       (SELECT COUNT(*)::int FROM fans f WHERE f.following_id = u.id) AS fan_count,
       EXISTS(SELECT 1 FROM fans f WHERE f.follower_id = $1 AND f.following_id = u.id) AS is_fan
     FROM users u

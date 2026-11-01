@@ -72,20 +72,6 @@ button { cursor: pointer; }
 .avatar-xl { width: 88px; height: 88px; font-size: 34px; border: 4px solid #ffffff; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18); }
 .avatar-button { cursor: pointer; }
 
-.badge {
-  display: inline-block;
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  vertical-align: middle;
-}
-.badge-kid { background: #fef3c7; color: #b45309; }
-.badge-teen { background: #ede9fe; color: #6d28d9; }
-.badge-adult { background: #e0f2fe; color: #0369a1; }
-
 .brand {
   display: inline-flex;
   align-items: center;
@@ -482,7 +468,6 @@ textarea.input { resize: vertical; min-height: 70px; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.person-meta { margin: 4px 0 2px; }
 .person-fans { margin-bottom: 9px; color: #8b93a1; font-size: 12px; }
 
 .user-list { overflow: hidden; }
@@ -506,7 +491,6 @@ textarea.input { resize: vertical; min-height: 70px; }
 }
 .link-name:hover { color: #7c3aed; text-decoration: underline; }
 .user-sub { margin-top: 2px; color: #8b93a1; font-size: 12px; }
-.user-sub .badge { margin-right: 5px; }
 .user-row > .btn { margin-left: 10px; }
 
 .search-box { display: flex; align-items: center; padding: 10px; }
@@ -535,7 +519,6 @@ textarea.input { resize: vertical; min-height: 70px; }
   letter-spacing: -0.04em;
   word-wrap: break-word;
 }
-.profile-badge { margin-bottom: 6px; }
 .profile-bio {
   margin: 2px 0 0;
   color: #4b5563;
@@ -723,7 +706,7 @@ textarea.input { resize: vertical; min-height: 70px; }
       <span class="brand-name">Rise</span>
     </div>
     <h1 class="hero-title">Your people. Your fans. Your feed.</h1>
-    <p class="hero-copy">Rise is a friendlier social network for kids, teens, and adults. Share text and photos, build a fanbase, and see what your people are posting.</p>
+    <p class="hero-copy">Rise is a friendlier social network. Share text and photos, build a fanbase, and see what your people are posting.</p>
     <ul class="hero-points">
       <li>Text and photo posts</li>
       <li>Fans instead of friend requests</li>
@@ -763,17 +746,9 @@ textarea.input { resize: vertical; min-height: 70px; }
           <span>Password</span>
           <input id="signupPassword" class="input" type="password" maxlength="128" autocomplete="new-password" placeholder="At least 6 characters">
         </label>
-        <label class="field">
-          <span>I am a</span>
-          <select id="signupAge" class="input">
-            <option value="kid">Kid</option>
-            <option value="teen">Teen</option>
-            <option value="adult" selected>Adult</option>
-          </select>
-        </label>
         <p id="signupError" class="form-error"></p>
         <button type="submit" id="signupBtn" class="btn btn-primary btn-block">Create my account</button>
-        <p class="auth-note">No email. No phone. No parental forms. Pick a username and you are in.</p>
+        <p class="auth-note">No email. No phone. Pick a username and you are in.</p>
       </form>
     </div>
   </div>
@@ -870,7 +845,6 @@ textarea.input { resize: vertical; min-height: 70px; }
           <span id="profileAvatar" class="avatar avatar-xl"></span>
           <div class="profile-info">
             <h1 id="profileName" class="profile-name"></h1>
-            <div id="profileBadge" class="profile-badge"></div>
             <p id="profileBio" class="profile-bio"></p>
           </div>
           <div class="profile-actions">
@@ -1146,12 +1120,6 @@ textarea.input { resize: vertical; min-height: 70px; }
     return '<span class="' + classes + '" style="' + style + '">' + esc(avatarInitial(username)) + '</span>';
   }
 
-  function ageBadge(group) {
-    var labels = { kid: 'Kid', teen: 'Teen', adult: 'Adult' };
-    var safeGroup = labels[group] ? group : 'adult';
-    return '<span class="badge badge-' + safeGroup + '">' + labels[safeGroup] + '</span>';
-  }
-
   function timeAgo(timestamp) {
     var seconds = Math.max(1, Math.floor((Date.now() - timestamp) / 1000));
     if (seconds < 60) return 'just now';
@@ -1172,7 +1140,7 @@ textarea.input { resize: vertical; min-height: 70px; }
     html += '<div class="post-head">';
     html += avatarHtml(post.author.username, 'md', true);
     html += '<div class="post-meta">';
-    html += '<div><button type="button" class="post-username" data-profile="' + esc(post.author.username) + '">' + esc(post.author.username) + '</button> ' + ageBadge(post.author.ageGroup) + '</div>';
+    html += '<div><button type="button" class="post-username" data-profile="' + esc(post.author.username) + '">' + esc(post.author.username) + '</button></div>';
     html += '<div class="post-time">' + timeAgo(post.createdAt) + '</div>';
     html += '</div>';
     if (own) html += '<button type="button" class="post-delete" data-delete="' + post.id + '">Delete</button>';
@@ -1204,7 +1172,7 @@ textarea.input { resize: vertical; min-height: 70px; }
     html += avatarHtml(user.username, 'md', true);
     html += '<div class="user-row-info">';
     html += '<button type="button" class="link-name" data-profile="' + esc(user.username) + '">' + esc(user.username) + '</button>';
-    html += '<div class="user-sub">' + ageBadge(user.ageGroup) + '<span>' + (user.fanCount || 0) + ' fans</span></div>';
+    html += '<div class="user-sub">' + (user.fanCount || 0) + ' fans</div>';
     html += '</div>';
     if (!user.isMe) {
       html += '<button type="button" class="btn btn-sm ' + (user.isFan ? 'btn-soft' : 'btn-primary') + '" data-fan="' + esc(user.username) + '">' + (user.isFan ? 'Fanned' : 'Fan') + '</button>';
@@ -1220,7 +1188,6 @@ textarea.input { resize: vertical; min-height: 70px; }
       html += '<div class="person-card">';
       html += avatarHtml(user.username, 'lg', true);
       html += '<button type="button" class="person-name" data-profile="' + esc(user.username) + '">' + esc(user.username) + '</button>';
-      html += '<div class="person-meta">' + ageBadge(user.ageGroup) + '</div>';
       html += '<div class="person-fans">' + (user.fanCount || 0) + ' fans</div>';
       if (!user.isMe) {
         html += '<button type="button" class="btn btn-sm btn-block ' + (user.isFan ? 'btn-soft' : 'btn-primary') + '" data-fan="' + esc(user.username) + '">' + (user.isFan ? 'Fanned' : 'Fan') + '</button>';
@@ -1606,7 +1573,6 @@ textarea.input { resize: vertical; min-height: 70px; }
     window.scrollTo(0, 0);
 
     setText($('profileName'), username);
-    $('profileBadge').innerHTML = '';
     setText($('profileBio'), '');
     setText($('statPostCount'), '0');
     setText($('statFanCount'), '0');
@@ -1636,7 +1602,6 @@ textarea.input { resize: vertical; min-height: 70px; }
 
     paintAvatar($('profileAvatar'), user.username);
     setText($('profileName'), user.username);
-    $('profileBadge').innerHTML = ageBadge(user.ageGroup);
     setText($('profileBio'), user.bio || (user.isMe ? 'Add a short bio so people know you.' : 'No bio yet.'));
     setText($('statPostCount'), String(user.postCount || 0));
     setText($('statFanCount'), String(user.fanCount || 0));
@@ -1722,11 +1687,6 @@ textarea.input { resize: vertical; min-height: 70px; }
     if (!state.me) return;
     var html = '<form id="editProfileForm" class="modal-form">';
     html += '<label class="field"><span>Bio</span><textarea id="editBio" class="input" maxlength="160" placeholder="Tell people a little about yourself">' + esc(state.me.bio || '') + '</textarea></label>';
-    html += '<label class="field"><span>I am a</span><select id="editAge" class="input">';
-    html += '<option value="kid"' + (state.me.ageGroup === 'kid' ? ' selected' : '') + '>Kid</option>';
-    html += '<option value="teen"' + (state.me.ageGroup === 'teen' ? ' selected' : '') + '>Teen</option>';
-    html += '<option value="adult"' + (state.me.ageGroup === 'adult' ? ' selected' : '') + '>Adult</option>';
-    html += '</select></label>';
     html += '<p id="editError" class="form-error"></p>';
     html += '<button type="submit" id="editSaveBtn" class="btn btn-primary btn-block">Save profile</button>';
     html += '</form>';
@@ -1741,10 +1701,9 @@ textarea.input { resize: vertical; min-height: 70px; }
     var button = $('editSaveBtn');
     if (isBusy(button)) return;
     var bio = $('editBio').value.trim();
-    var ageGroup = $('editAge').value;
     setText($('editError'), '');
     setBusy(button, true, 'Saving...');
-    api('PATCH', '/api/me', { bio: bio, ageGroup: ageGroup }, function (error, data) {
+    api('PATCH', '/api/me', { bio: bio }, function (error, data) {
       setBusy(button, false);
       if (error) {
         setText($('editError'), error.message);
@@ -2039,14 +1998,13 @@ textarea.input { resize: vertical; min-height: 70px; }
     if (isBusy(button)) return;
     var username = $('signupUsername').value.trim();
     var password = $('signupPassword').value;
-    var ageGroup = $('signupAge').value;
     setText($('signupError'), '');
     if (!username || !password) {
       setText($('signupError'), 'Pick a username and password.');
       return;
     }
     setBusy(button, true, 'Creating account...');
-    api('POST', '/api/signup', { username: username, password: password, ageGroup: ageGroup }, function (error, data) {
+    api('POST', '/api/signup', { username: username, password: password }, function (error, data) {
       setBusy(button, false);
       if (error) {
         setText($('signupError'), error.message);

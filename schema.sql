@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS users (
   id BIGSERIAL PRIMARY KEY,
   username TEXT NOT NULL,
   password_hash TEXT NOT NULL,
-  age_group TEXT NOT NULL DEFAULT 'adult' CHECK (age_group IN ('kid', 'teen', 'adult')),
   bio TEXT NOT NULL DEFAULT '',
   created_at BIGINT NOT NULL
 );
@@ -46,3 +45,5 @@ CREATE INDEX IF NOT EXISTS idx_fans_following_id ON fans(following_id, created_a
 CREATE INDEX IF NOT EXISTS idx_fans_follower_id ON fans(follower_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at);
+
+ALTER TABLE users DROP COLUMN IF EXISTS age_group;
