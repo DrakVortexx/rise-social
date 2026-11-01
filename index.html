@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#7c3aed">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Rise</title>
+<style>
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; min-height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #f0f2f5;
+  color: #16181d;
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(124, 58, 237, 0.14);
+}
+button, input, select, textarea { font-family: inherit; font-size: inherit; }
+button { cursor: pointer; }
+.hidden { display: none !important; }
+.muted { color: #6b7280; }
+.small { font-size: 12px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #111827;
+  background: #eef1f6;
+  text-decoration: none;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.6; cursor: default; }
+.btn-primary { background: #7c3aed; color: #ffffff; }
+.btn-primary:hover { background: #6d28d9; }
+.btn-soft { background: #f3e8ff; color: #6d28d9; }
+.btn-soft:hover { background: #e9d5ff; }
+.btn-ghost { background: transparent; color: #4b5563; }
+.btn-ghost:hover { background: #f3f4f6; }
+.btn-sm { padding: 7px 12px; font-size: 13px; border-radius: 8px; }
+.btn-block { width: 100%; }
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  font-weight: 800;
+  line-height: 1;
+  overflow: hidden;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.avatar-sm { width: 34px; height: 34px; font-size: 14px; }
+.avatar-md { width: 44px; height: 44px; font-size: 17px; }
+.avatar-lg { width: 58px; height: 58px; font-size: 22px; }
+.avatar-xl { width: 88px; height: 88px; font-size: 34px; border: 4px solid #ffffff; box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18); }
+.avatar-button { cursor: pointer; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.badge-kid { background: #fef3c7; color: #b45309; }
+.badge-teen { background: #ede9fe; color: #6d28d9; }
+.badge-adult { background: #e0f2fe; color: #0369a1; }
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #6d28d9, #c026d3);
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(109, 40, 217, 0.28);
+}
+.brand-name {
+  margin-left: 9px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.auth-screen { display: flex; min-height: 100vh; }
+.auth-hero {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 64px;
+  color: #ffffff;
+  background-color: #6d28d9;
+  background-image: radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.18), transparent 34%), radial-gradient(circle at 86% 82%, rgba(192, 38, 211, 0.5), transparent 38%), linear-gradient(135deg, #4c1d95 0%, #7c3aed 52%, #c026d3 100%);
+}
+.auth-hero .brand-name { color: #ffffff; }
+.auth-hero .brand-mark { background: rgba(255, 255, 255, 0.2); box-shadow: none; }
+.hero-title {
+  max-width: 580px;
+  margin: 30px 0 16px;
+  font-size: 46px;
+  line-height: 1.06;
+  letter-spacing: -1.4px;
+}
+.hero-copy {
+  max-width: 500px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.hero-points {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-points li {
+  position: relative;
+  margin: 11px 0;
+  padding-left: 28px;
+  color: rgba(255, 255, 255, 0.94);
+  font-weight: 600;
+}
+.hero-points li:before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #ffffff;
+  font-weight: 900;
+}
+.auth-panel {
+  flex: 0 0 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: #ffffff;
+}
+.auth-card { width: 100%; max-width: 390px; }
+.auth-kicker {
+  margin: 0 0 6px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.auth-title {
+  margin: 0 0 22px;
+  font-size: 27px;
+  letter-spacing: -0.04em;
+}
+.auth-tabs {
+  display: flex;
+  padding: 4px;
+  border-radius: 12px;
+  background: #f0f2f5;
+}
+.auth-tab {
+  flex: 1 1 50%;
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 8px;
+  background: transparent;
+  color: #6b7280;
+  font-weight: 800;
+  font-size: 14px;
+}
+.auth-tab.is-active {
+  background: #ffffff;
+  color: #16181d;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+}
+.auth-form { margin-top: 18px; }
+.field { display: block; margin: 0 0 14px; }
+.field > span, .field > label {
+  display: block;
+  margin: 0 0 6px;
+  color: #374151;
+  font-size: 13px;
+  font-weight: 700;
+}
+.input {
+  display: block;
+  width: 100%;
+  border: 1px solid #d8dce3;
+  border-radius: 10px;
+  padding: 11px 13px;
+  background: #fbfcfd;
+  color: #16181d;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input:focus {
+  border-color: #7c3aed;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+}
+textarea.input { resize: vertical; min-height: 70px; }
+.field-help { margin: 6px 0 0; color: #8b93a1; font-size: 12px; }
+.form-error {
+  min-height: 20px;
+  margin: 2px 0 10px;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+}
+.auth-note {
+  margin: 16px 0 0;
+  color: #8b93a1;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  border-bottom: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.96);
+}
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 980px;
+  height: 60px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+.topnav { display: flex; align-items: center; }
+.nav-btn {
+  border: 0;
+  border-radius: 9px;
+  margin: 0 2px;
+  padding: 8px 15px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 700;
+}
+.nav-btn:hover { background: #f3f4f6; }
+.nav-btn.is-active { background: #f3e8ff; color: #6d28d9; }
+.topbar-user { display: flex; align-items: center; }
+.topbar-user .avatar { margin-right: 8px; }
+.top-logout { margin-left: 2px; }
+
+.container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 78px 14px 70px;
+}
+.view-heading { margin: 4px 4px 14px; }
+.view-heading h1 {
+  margin: 0;
+  font-size: 25px;
+  letter-spacing: -0.04em;
+}
+.view-heading p { margin: 4px 0 0; color: #6b7280; font-size: 14px; }
+.section-title {
+  margin: 18px 4px 8px;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.card {
+  margin: 0 0 14px;
+  border: 1px solid rgba(229, 231, 235, 0.9);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 2px 6px rgba(16, 24, 40, 0.04);
+}
+
+.composer { padding: 16px; }
+.composer-head { display: flex; align-items: flex-start; }
+.composer-head .avatar { margin-right: 10px; }
+.composer-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 56px;
+  border: 0;
+  padding: 6px 0 0;
+  background: transparent;
+  color: #16181d;
+  font-size: 16px;
+  line-height: 1.45;
+  outline: none;
+  resize: none;
+}
+.composer-text::placeholder { color: #9ca3af; }
+.composer-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f1f4;
+}
+.file-btn { position: relative; overflow: hidden; }
+.file-btn input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.composer-actions .btn-primary { margin-left: auto; }
+.image-preview {
+  position: relative;
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+.image-preview img {
+  display: block;
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+}
+.remove-image {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(17, 24, 39, 0.62);
+  color: #ffffff;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.post-list { margin: 0; }
+.post { padding: 14px 16px; }
+.post-head { display: flex; align-items: flex-start; }
+.post-head > .avatar { margin-right: 10px; }
+.post-meta { flex: 1 1 auto; min-width: 0; padding-top: 1px; }
+.post-username {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #16181d;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: left;
+}
+.post-username:hover { color: #7c3aed; text-decoration: underline; }
+.post-time { margin-top: 2px; color: #8b93a1; font-size: 12px; }
+.post-delete {
+  border: 0;
+  margin-left: 8px;
+  padding: 4px 6px;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 700;
+}
+.post-delete:hover { color: #dc2626; }
+.post-body { margin-top: 10px; }
+.post-text {
+  margin: 0 0 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.post-text:last-child { margin-bottom: 0; }
+.post-media {
+  max-height: 540px;
+  margin-top: 2px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+.post-image { display: block; width: 100%; height: auto; }
+.post-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 9px;
+  border-top: 1px solid #f0f1f4;
+}
+.like-btn {
+  display: inline-flex;
+  align-items: center;
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+}
+.like-btn:hover { background: #f8f9fb; }
+.like-btn.liked { background: #fff1f2; color: #e11d48; }
+.like-heart { margin-right: 5px; font-size: 17px; line-height: 1; }
+.like-count { margin-left: 5px; color: #9ca3af; }
+.like-btn.liked .like-count { color: #e11d48; }
+
+.loading {
+  padding: 26px 16px;
+  color: #8b93a1;
+  font-size: 14px;
+  text-align: center;
+}
+.empty { padding: 34px 22px; color: #6b7280; text-align: center; }
+.empty h3 { margin: 0 0 6px; color: #16181d; font-size: 17px; }
+.empty p { margin: 0 0 16px; font-size: 14px; }
+.load-more { margin: 6px 0 16px; }
+
+.people-strip {
+  display: flex;
+  overflow-x: auto;
+  padding: 2px 2px 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.person-card {
+  flex: 0 0 142px;
+  margin-right: 10px;
+  padding: 16px 12px 13px;
+  border: 1px solid #eceef2;
+  border-radius: 15px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+.person-card .avatar { margin-bottom: 8px; }
+.person-name {
+  display: block;
+  max-width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #16181d;
+  font-size: 14px;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.person-meta { margin: 4px 0 2px; }
+.person-fans { margin-bottom: 9px; color: #8b93a1; font-size: 12px; }
+
+.user-list { overflow: hidden; }
+.user-row {
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  border-bottom: 1px solid #f2f3f6;
+}
+.user-row:last-child { border-bottom: 0; }
+.user-row > .avatar { margin-right: 10px; }
+.user-row-info { flex: 1 1 auto; min-width: 0; }
+.link-name {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #16181d;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: left;
+}
+.link-name:hover { color: #7c3aed; text-decoration: underline; }
+.user-sub { margin-top: 2px; color: #8b93a1; font-size: 12px; }
+.user-sub .badge { margin-right: 5px; }
+.user-row > .btn { margin-left: 10px; }
+
+.search-box { display: flex; align-items: center; padding: 10px; }
+.search-input { flex: 1 1 auto; min-width: 0; }
+.search-box .btn { margin-left: 8px; }
+
+.profile-top { margin-bottom: 10px; }
+.profile-top .btn { background: #ffffff; }
+.profile-card { overflow: hidden; padding: 0; }
+.profile-cover {
+  height: 116px;
+  background-color: #6d28d9;
+  background-image: radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.24), transparent 32%), radial-gradient(circle at 82% 76%, rgba(192, 38, 211, 0.55), transparent 38%), linear-gradient(135deg, #4c1d95, #7c3aed 58%, #c026d3);
+}
+.profile-main {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 18px 14px;
+}
+.profile-main .avatar-xl { margin-top: -36px; margin-right: 13px; }
+.profile-info { flex: 1 1 auto; min-width: 0; padding-top: 10px; }
+.profile-name {
+  margin: 0 0 2px;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  word-wrap: break-word;
+}
+.profile-badge { margin-bottom: 6px; }
+.profile-bio {
+  margin: 2px 0 0;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.profile-actions { margin-left: 10px; text-align: right; }
+.profile-actions .btn { margin-left: 6px; }
+.profile-stats {
+  display: flex;
+  margin: 0 18px;
+  padding: 12px 0 14px;
+  border-top: 1px solid #f0f1f4;
+}
+.profile-stat {
+  flex: 1 1 33.333%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #6b7280;
+  font-family: inherit;
+  text-align: center;
+}
+.profile-stat strong {
+  display: block;
+  color: #16181d;
+  font-size: 17px;
+  line-height: 1.2;
+}
+.profile-stat span { font-size: 12px; }
+
+.bottomnav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 40;
+  display: none;
+  border-top: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+.bottom-btn {
+  flex: 1 1 25%;
+  border: 0;
+  padding: 9px 4px 8px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+.bottom-btn.is-active { color: #7c3aed; }
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(15, 23, 42, 0.56);
+}
+.modal-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 440px;
+  max-height: 82vh;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.32);
+  overflow: hidden;
+}
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f1f4;
+}
+.modal-head h3 {
+  margin: 0;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 20px;
+  line-height: 30px;
+}
+.modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.modal-form { padding: 16px; }
+.modal-form .btn { margin-top: 4px; }
+
+.toast {
+  position: fixed;
+  right: auto;
+  bottom: 78px;
+  left: 50%;
+  z-index: 100;
+  max-width: 88%;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 860px) {
+  .auth-screen { flex-direction: column; }
+  .auth-hero { padding: 34px 24px 28px; }
+  .hero-title { margin-top: 24px; font-size: 32px; letter-spacing: -0.9px; }
+  .hero-copy { font-size: 15px; }
+  .hero-points { display: none; }
+  .auth-panel { flex: 1 1 auto; width: 100%; padding: 24px 18px 44px; background: #f7f8fb; }
+  .auth-card {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 22px 18px;
+    border: 1px solid #eceef2;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+  }
+}
+
+@media (max-width: 760px) {
+  .topnav { display: none; }
+  .top-logout { display: none; }
+  .bottomnav { display: flex; }
+  .container { padding: 74px 10px 86px; }
+  .topbar-inner { height: 56px; padding: 0 12px; }
+  .brand-name { font-size: 19px; }
+  .profile-main { padding: 0 14px 13px; }
+  .profile-main .avatar-xl { width: 78px; height: 78px; font-size: 30px; margin-right: 10px; }
+  .profile-actions { width: 100%; margin: 10px 0 0; text-align: left; }
+  .profile-actions .btn { margin: 0 6px 0 0; }
+  .profile-stats { margin: 0 14px; }
+  .toast { bottom: 76px; }
+}
+
+@media (max-width: 420px) {
+  .post, .composer { padding-left: 13px; padding-right: 13px; }
+  .profile-main { flex-wrap: wrap; }
+  .profile-info { padding-top: 6px; }
+  .profile-actions { margin-top: 8px; }
+  .auth-hero { padding: 28px 20px 24px; }
+  .hero-title { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<section id="authScreen" class="auth-screen">
+  <div class="auth-hero">
+    <div class="brand">
+      <span class="brand-mark">R</span>
+      <span class="brand-name">Rise</span>
+    </div>
+    <h1 class="hero-title">Your people. Your fans. Your feed.</h1>
+    <p class="hero-copy">Rise is a friendlier social network for kids, teens, and adults. Share text and photos, build a fanbase, and see what your people are posting.</p>
+    <ul class="hero-points">
+      <li>Text and photo posts</li>
+      <li>Fans instead of friend requests</li>
+      <li>No email or phone number</li>
+      <li>Simple enough for everyone</li>
+    </ul>
+  </div>
+  <div class="auth-panel">
+    <div class="auth-card">
+      <p class="auth-kicker">Welcome to Rise</p>
+      <h2 class="auth-title">Post, get popular, repeat.</h2>
+      <div class="auth-tabs">
+        <button type="button" id="authLoginTab" class="auth-tab is-active">Log in</button>
+        <button type="button" id="authSignupTab" class="auth-tab">Sign up</button>
+      </div>
+
+      <form id="loginForm" class="auth-form" autocomplete="on">
+        <label class="field">
+          <span>Username</span>
+          <input id="loginUsername" class="input" type="text" maxlength="20" autocomplete="username" placeholder="Your username" autocapitalize="none" spellcheck="false">
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input id="loginPassword" class="input" type="password" maxlength="128" autocomplete="current-password" placeholder="Your password">
+        </label>
+        <p id="loginError" class="form-error"></p>
+        <button type="submit" id="loginBtn" class="btn btn-primary btn-block">Log in</button>
+        <p class="auth-note">Just a username and password. Nothing else.</p>
+      </form>
+
+      <form id="signupForm" class="auth-form hidden" autocomplete="on">
+        <label class="field">
+          <span>Pick a username</span>
+          <input id="signupUsername" class="input" type="text" maxlength="20" autocomplete="username" placeholder="3-20 letters, numbers, underscores" autocapitalize="none" spellcheck="false">
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input id="signupPassword" class="input" type="password" maxlength="128" autocomplete="new-password" placeholder="At least 6 characters">
+        </label>
+        <label class="field">
+          <span>I am a</span>
+          <select id="signupAge" class="input">
+            <option value="kid">Kid</option>
+            <option value="teen">Teen</option>
+            <option value="adult" selected>Adult</option>
+          </select>
+        </label>
+        <p id="signupError" class="form-error"></p>
+        <button type="submit" id="signupBtn" class="btn btn-primary btn-block">Create my account</button>
+        <p class="auth-note">No email. No phone. No parental forms. Pick a username and you are in.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div id="mainScreen" class="hidden">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button type="button" id="homeBtn" class="brand">
+        <span class="brand-mark">R</span>
+        <span class="brand-name">Rise</span>
+      </button>
+      <nav class="topnav">
+        <button type="button" class="nav-btn is-active" data-nav="feed">Feed</button>
+        <button type="button" class="nav-btn" data-nav="discover">Discover</button>
+        <button type="button" class="nav-btn" data-nav="search">Search</button>
+      </nav>
+      <div class="topbar-user">
+        <button type="button" id="topProfileBtn" class="avatar avatar-sm avatar-button" title="Your profile"></button>
+        <button type="button" id="logoutBtn" class="btn btn-ghost btn-sm top-logout">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="viewFeed" class="view">
+      <div class="card composer">
+        <div class="composer-head">
+          <span id="composerAvatar" class="avatar avatar-md"></span>
+          <textarea id="postText" class="composer-text" maxlength="1000" placeholder="What do you want to share?"></textarea>
+        </div>
+        <div id="imagePreviewWrap" class="image-preview hidden">
+          <img id="imagePreview" alt="Selected photo">
+          <button type="button" id="removeImageBtn" class="remove-image" title="Remove photo">&times;</button>
+        </div>
+        <div class="composer-actions">
+          <label class="btn btn-soft file-btn">
+            Photo
+            <input id="photoInput" type="file" accept="image/*">
+          </label>
+          <button type="button" id="postBtn" class="btn btn-primary">Post</button>
+        </div>
+        <p id="postError" class="form-error"></p>
+      </div>
+
+      <div id="feedList" class="post-list"></div>
+      <div id="feedMoreWrap" class="load-more hidden">
+        <button type="button" id="feedMoreBtn" class="btn btn-soft btn-block">Load more posts</button>
+      </div>
+      <div id="feedEmpty" class="card empty hidden">
+        <h3>Your feed is quiet</h3>
+        <p>Fan a few people and their posts will show up here.</p>
+        <button type="button" class="btn btn-primary" data-nav="discover">Find people</button>
+      </div>
+    </section>
+
+    <section id="viewDiscover" class="view hidden">
+      <div class="view-heading">
+        <h1>Discover</h1>
+        <p>Fresh posts and new people to fan.</p>
+      </div>
+      <h2 id="peopleHeading" class="section-title">New people</h2>
+      <div id="discoverPeople" class="people-strip"></div>
+      <h2 class="section-title">Latest posts</h2>
+      <div id="discoverPosts" class="post-list"></div>
+      <div id="discoverMoreWrap" class="load-more hidden">
+        <button type="button" id="discoverMoreBtn" class="btn btn-soft btn-block">Load more posts</button>
+      </div>
+      <div id="discoverEmpty" class="card empty hidden">
+        <h3>Nothing here yet</h3>
+        <p>Be the first to post something.</p>
+      </div>
+    </section>
+
+    <section id="viewSearch" class="view hidden">
+      <div class="view-heading">
+        <h1>Search</h1>
+        <p>Find people by username or posts by their words.</p>
+      </div>
+      <div class="card search-box">
+        <input id="searchInput" class="input search-input" type="search" placeholder="Search people and posts" autocomplete="off" autocapitalize="none" spellcheck="false">
+        <button type="button" id="searchBtn" class="btn btn-primary">Search</button>
+      </div>
+      <div id="searchResults"></div>
+    </section>
+
+    <section id="viewProfile" class="view hidden">
+      <div class="profile-top">
+        <button type="button" id="profileBackBtn" class="btn btn-sm">&larr; Back</button>
+      </div>
+      <div class="card profile-card">
+        <div class="profile-cover"></div>
+        <div class="profile-main">
+          <span id="profileAvatar" class="avatar avatar-xl"></span>
+          <div class="profile-info">
+            <h1 id="profileName" class="profile-name"></h1>
+            <div id="profileBadge" class="profile-badge"></div>
+            <p id="profileBio" class="profile-bio"></p>
+          </div>
+          <div class="profile-actions">
+            <button type="button" id="profileFollowBtn" class="btn btn-primary hidden">Fan</button>
+            <button type="button" id="profileEditBtn" class="btn btn-soft hidden">Edit profile</button>
+            <button type="button" id="profileLogoutBtn" class="btn btn-ghost hidden">Log out</button>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <strong id="statPostCount">0</strong>
+            <span>Posts</span>
+          </div>
+          <button type="button" id="profileFansBtn" class="profile-stat">
+            <strong id="statFanCount">0</strong>
+            <span>Fans</span>
+          </button>
+          <button type="button" id="profileFollowingBtn" class="profile-stat">
+            <strong id="statFollowingCount">0</strong>
+            <span>Following</span>
+          </button>
+        </div>
+      </div>
+      <div id="profilePosts" class="post-list"></div>
+      <div id="profileEmpty" class="card empty hidden">
+        <h3>No posts yet</h3>
+        <p>When this person posts, it will show up here.</p>
+      </div>
+      <div id="profileMoreWrap" class="load-more hidden">
+        <button type="button" id="profileMoreBtn" class="btn btn-soft btn-block">Load more posts</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottomnav">
+    <button type="button" class="bottom-btn is-active" data-nav="feed">Feed</button>
+    <button type="button" class="bottom-btn" data-nav="discover">Discover</button>
+    <button type="button" class="bottom-btn" data-nav="search">Search</button>
+    <button type="button" class="bottom-btn" data-nav="profile">Profile</button>
+  </nav>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div id="modalBackdrop" class="modal-backdrop"></div>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="modalTitle"></h3>
+      <button type="button" id="modalCloseBtn" class="modal-close" title="Close">&times;</button>
+    </div>
+    <div id="modalBody" class="modal-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var TOKEN_KEY = 'rise_token';
+  var AVATAR_COLORS = ['#6d28d9', '#9333ea', '#c026d3', '#db2777', '#7c3aed', '#a21caf', '#4f46e5', '#be185d'];
+
+  var state = {
+    token: null,
+    me: null,
+    view: 'feed',
+    previousView: 'feed',
+    feedCursor: null,
+    feedHasMore: false,
+    feedLoaded: false,
+    feedLoading: false,
+    feedDirty: false,
+    feedSeq: 0,
+    discoverCursor: null,
+    discoverHasMore: false,
+    discoverLoaded: false,
+    discoverLoading: false,
+    discoverDirty: false,
+    discoverSeq: 0,
+    searchSeq: 0,
+    profileUsername: null,
+    profileCursor: null,
+    profileHasMore: false,
+    profileData: null,
+    profileSeq: 0,
+    modalSeq: 0,
+    photoSeq: 0,
+    pendingImage: null,
+    imageBusy: false,
+    searchTimer: null,
+    authMode: 'login'
+  };
+
+  var toastTimer = null;
+
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function on(element, eventName, handler) {
+    if (element) element.addEventListener(eventName, handler, false);
+  }
+
+  function show(element) {
+    if (element) element.classList.remove('hidden');
+  }
+
+  function hide(element) {
+    if (element) element.classList.add('hidden');
+  }
+
+  function setText(element, value) {
+    if (element) element.textContent = value;
+  }
+
+  function esc(value) {
+    return String(value === null || value === undefined ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function showToast(message) {
+    var toast = $('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toast.classList.remove('show');
+    }, 2600);
+  }
+
+  function isBusy(button) {
+    return Boolean(button && button.getAttribute('data-busy') === '1');
+  }
+
+  function setBusy(button, busy, label) {
+    if (!button) return;
+    if (busy) {
+      if (isBusy(button)) return;
+      button.setAttribute('data-busy', '1');
+      button.setAttribute('data-idle-label', button.innerHTML);
+      button.innerHTML = label || 'Please wait...';
+      button.disabled = true;
+    } else {
+      if (!isBusy(button)) return;
+      var idle = button.getAttribute('data-idle-label');
+      if (idle !== null) button.innerHTML = idle;
+      button.removeAttribute('data-busy');
+      button.removeAttribute('data-idle-label');
+      button.disabled = false;
+    }
+  }
+
+  function resetBusyButtons() {
+    var buttons = document.querySelectorAll('[data-busy="1"]');
+    for (var i = 0; i < buttons.length; i++) setBusy(buttons[i], false);
+  }
+
+  function readStoredToken() {
+    try {
+      return window.localStorage.getItem(TOKEN_KEY);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function saveSession(token, user) {
+    state.token = token;
+    state.me = user;
+    try {
+      window.localStorage.setItem(TOKEN_KEY, token);
+    } catch (error) {}
+  }
+
+  function clearSession() {
+    state.token = null;
+    state.me = null;
+    try {
+      window.localStorage.removeItem(TOKEN_KEY);
+    } catch (error) {}
+  }
+
+  function api(method, path, body, callback) {
+    var xhr = new XMLHttpRequest();
+    var finished = false;
+    var requestToken = state.token;
+
+    function done(error, data) {
+      if (finished) return;
+      finished = true;
+      if (requestToken && requestToken !== state.token) return;
+      callback(error, data);
+    }
+
+    xhr.open(method, path, true);
+    xhr.timeout = 30000;
+    xhr.setRequestHeader('Accept', 'application/json');
+    if (body !== undefined && body !== null) xhr.setRequestHeader('Content-Type', 'application/json');
+    if (requestToken) xhr.setRequestHeader('Authorization', 'Bearer ' + requestToken);
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      var data = null;
+      try {
+        data = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+      } catch (error) {}
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        done(null, data);
+        return;
+      }
+
+      if (xhr.status === 401 && path !== '/api/login' && path !== '/api/signup') {
+        if (requestToken && requestToken === state.token) {
+          clearSession();
+          showAuth();
+        }
+        done({ status: 401, message: 'Your session expired. Please log in again.' }, data);
+        return;
+      }
+
+      done({
+        status: xhr.status,
+        message: data && data.error ? data.error : 'Request failed. Please try again.'
+      }, data);
+    };
+
+    xhr.onerror = function () {
+      done({ status: 0, message: 'Network error. Check your connection.' }, null);
+    };
+
+    xhr.ontimeout = function () {
+      done({ status: 0, message: 'The request timed out. Please try again.' }, null);
+    };
+
+    try {
+      xhr.send(body !== undefined && body !== null ? JSON.stringify(body) : null);
+    } catch (error) {
+      done({ status: 0, message: 'Could not send the request.' }, null);
+    }
+  }
+
+  function avatarColor(name) {
+    var hash = 0;
+    var text = String(name || '?');
+    for (var i = 0; i < text.length; i++) {
+      hash = ((hash << 5) - hash) + text.charCodeAt(i);
+      hash = hash | 0;
+    }
+    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+  }
+
+  function avatarInitial(name) {
+    return String(name || '?').charAt(0).toUpperCase();
+  }
+
+  function paintAvatar(element, username) {
+    if (!element) return;
+    element.style.backgroundColor = avatarColor(username);
+    element.textContent = avatarInitial(username);
+  }
+
+  function avatarHtml(username, size, clickable) {
+    var classes = 'avatar avatar-' + size + (clickable ? ' avatar-button' : '');
+    var style = 'background-color:' + avatarColor(username) + ';';
+    if (clickable) {
+      return '<button type="button" class="' + classes + '" style="' + style + '" data-profile="' + esc(username) + '">' + esc(avatarInitial(username)) + '</button>';
+    }
+    return '<span class="' + classes + '" style="' + style + '">' + esc(avatarInitial(username)) + '</span>';
+  }
+
+  function ageBadge(group) {
+    var labels = { kid: 'Kid', teen: 'Teen', adult: 'Adult' };
+    var safeGroup = labels[group] ? group : 'adult';
+    return '<span class="badge badge-' + safeGroup + '">' + labels[safeGroup] + '</span>';
+  }
+
+  function timeAgo(timestamp) {
+    var seconds = Math.max(1, Math.floor((Date.now() - timestamp) / 1000));
+    if (seconds < 60) return 'just now';
+    var minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return minutes + 'm ago';
+    var hours = Math.floor(minutes / 60);
+    if (hours < 24) return hours + 'h ago';
+    var days = Math.floor(hours / 24);
+    if (days < 7) return days + 'd ago';
+    var weeks = Math.floor(days / 7);
+    if (weeks < 5) return weeks + 'w ago';
+    return new Date(timestamp).toLocaleDateString();
+  }
+
+  function postHtml(post) {
+    var own = state.me && state.me.id === post.author.id;
+    var html = '<article class="card post" data-post-card="' + post.id + '">';
+    html += '<div class="post-head">';
+    html += avatarHtml(post.author.username, 'md', true);
+    html += '<div class="post-meta">';
+    html += '<div><button type="button" class="post-username" data-profile="' + esc(post.author.username) + '">' + esc(post.author.username) + '</button> ' + ageBadge(post.author.ageGroup) + '</div>';
+    html += '<div class="post-time">' + timeAgo(post.createdAt) + '</div>';
+    html += '</div>';
+    if (own) html += '<button type="button" class="post-delete" data-delete="' + post.id + '">Delete</button>';
+    html += '</div>';
+    html += '<div class="post-body">';
+    if (post.text) html += '<p class="post-text">' + esc(post.text) + '</p>';
+    if (post.image) {
+      html += '<div class="post-media"><img class="post-image" src="' + esc(post.image) + '" alt="Photo by ' + esc(post.author.username) + '"></div>';
+    }
+    html += '</div>';
+    html += '<div class="post-actions">';
+    html += '<button type="button" class="like-btn' + (post.liked ? ' liked' : '') + '" data-like="' + post.id + '">';
+    html += '<span class="like-heart">' + (post.liked ? '\u2665' : '\u2661') + '</span>';
+    html += '<span class="like-label">' + (post.liked ? 'Liked' : 'Like') + '</span>';
+    html += '<span class="like-count">' + (post.likeCount || 0) + '</span>';
+    html += '</button>';
+    html += '</div></article>';
+    return html;
+  }
+
+  function postsHtml(posts) {
+    var html = '';
+    for (var i = 0; i < posts.length; i++) html += postHtml(posts[i]);
+    return html;
+  }
+
+  function userRowHtml(user) {
+    var html = '<div class="user-row">';
+    html += avatarHtml(user.username, 'md', true);
+    html += '<div class="user-row-info">';
+    html += '<button type="button" class="link-name" data-profile="' + esc(user.username) + '">' + esc(user.username) + '</button>';
+    html += '<div class="user-sub">' + ageBadge(user.ageGroup) + '<span>' + (user.fanCount || 0) + ' fans</span></div>';
+    html += '</div>';
+    if (!user.isMe) {
+      html += '<button type="button" class="btn btn-sm ' + (user.isFan ? 'btn-soft' : 'btn-primary') + '" data-fan="' + esc(user.username) + '">' + (user.isFan ? 'Fanned' : 'Fan') + '</button>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function peopleHtml(users) {
+    var html = '';
+    for (var i = 0; i < users.length; i++) {
+      var user = users[i];
+      html += '<div class="person-card">';
+      html += avatarHtml(user.username, 'lg', true);
+      html += '<button type="button" class="person-name" data-profile="' + esc(user.username) + '">' + esc(user.username) + '</button>';
+      html += '<div class="person-meta">' + ageBadge(user.ageGroup) + '</div>';
+      html += '<div class="person-fans">' + (user.fanCount || 0) + ' fans</div>';
+      if (!user.isMe) {
+        html += '<button type="button" class="btn btn-sm btn-block ' + (user.isFan ? 'btn-soft' : 'btn-primary') + '" data-fan="' + esc(user.username) + '">' + (user.isFan ? 'Fanned' : 'Fan') + '</button>';
+      }
+      html += '</div>';
+    }
+    return html;
+  }
+
+  function closestAttr(element, attribute) {
+    var node = element;
+    while (node && node !== document) {
+      if (node.getAttribute && node.getAttribute(attribute) !== null) return node;
+      node = node.parentNode;
+    }
+    return null;
+  }
+
+  function markFeedDirty() {
+    state.feedDirty = true;
+    state.feedLoaded = false;
+  }
+
+  function markDiscoverDirty() {
+    state.discoverDirty = true;
+    state.discoverLoaded = false;
+  }
+
+  function updateLikeUi(postId, liked, count) {
+    var buttons = document.querySelectorAll('[data-like="' + postId + '"]');
+    for (var i = 0; i < buttons.length; i++) {
+      var button = buttons[i];
+      if (liked) button.classList.add('liked');
+      else button.classList.remove('liked');
+      var heart = button.querySelector('.like-heart');
+      var label = button.querySelector('.like-label');
+      var countElement = button.querySelector('.like-count');
+      if (heart) heart.textContent = liked ? '\u2665' : '\u2661';
+      if (label) label.textContent = liked ? 'Liked' : 'Like';
+      if (countElement) countElement.textContent = String(count || 0);
+    }
+  }
+
+  function toggleLike(postId, button) {
+    if (button && button.disabled) return;
+    if (button) button.disabled = true;
+    api('POST', '/api/posts/' + postId + '/like', {}, function (error, data) {
+      if (button) button.disabled = false;
+      if (error) {
+        showToast(error.message);
+        return;
+      }
+      updateLikeUi(postId, data.liked, data.likeCount);
+    });
+  }
+
+  function updateProfileFollowButton() {
+    if (!state.profileData || state.profileData.user.isMe) return;
+    var user = state.profileData.user;
+    var button = $('profileFollowBtn');
+    if (!button) return;
+    button.setAttribute('data-fan', user.username);
+    button.textContent = user.isFan ? 'Fanned' : 'Fan';
+    button.className = 'btn ' + (user.isFan ? 'btn-soft' : 'btn-primary');
+  }
+
+  function updateFanUi(username, isFan, fanCount, followingCount) {
+    var buttons = document.querySelectorAll('[data-fan]');
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].getAttribute('data-fan') !== username) continue;
+      if (isFan) {
+        buttons[i].classList.add('btn-soft');
+        buttons[i].classList.remove('btn-primary');
+      } else {
+        buttons[i].classList.add('btn-primary');
+        buttons[i].classList.remove('btn-soft');
+      }
+      buttons[i].textContent = isFan ? 'Fanned' : 'Fan';
+    }
+    if (state.profileData && state.profileData.user.username.toLowerCase() === username.toLowerCase()) {
+      state.profileData.user.isFan = isFan;
+      state.profileData.user.fanCount = fanCount;
+      updateProfileFollowButton();
+      setText($('statFanCount'), String(fanCount));
+    }
+    if (state.me && typeof followingCount === 'number') {
+      state.me.followingCount = followingCount;
+      if (state.profileData && state.profileData.user.isMe) {
+        setText($('statFollowingCount'), String(followingCount));
+      }
+    }
+  }
+
+  function toggleFan(username, button) {
+    if (button && button.disabled) return;
+    if (button) button.disabled = true;
+    api('POST', '/api/users/' + encodeURIComponent(username) + '/fan', {}, function (error, data) {
+      if (button) button.disabled = false;
+      if (error) {
+        showToast(error.message);
+        return;
+      }
+      updateFanUi(username, data.isFan, data.fanCount, data.followingCount);
+      markFeedDirty();
+      markDiscoverDirty();
+      showToast(data.isFan ? 'You are now a fan of ' + username : 'You unfanned ' + username);
+    });
+  }
+
+  function removePostUi(postId) {
+    var cards = document.querySelectorAll('[data-post-card="' + postId + '"]');
+    for (var i = cards.length - 1; i >= 0; i--) {
+      if (cards[i].parentNode) cards[i].parentNode.removeChild(cards[i]);
+    }
+    if (state.me) state.me.postCount = Math.max(0, (state.me.postCount || 1) - 1);
+    if (state.profileData && state.profileData.user.isMe) {
+      state.profileData.user.postCount = Math.max(0, state.profileData.user.postCount - 1);
+      setText($('statPostCount'), String(state.profileData.user.postCount));
+      if (state.view === 'profile' && !$('profilePosts').querySelector('[data-post-card]')) {
+        show($('profileEmpty'));
+      }
+    }
+    if (state.view === 'feed' && !$('feedList').querySelector('[data-post-card]')) {
+      show($('feedEmpty'));
+    }
+    markFeedDirty();
+    markDiscoverDirty();
+  }
+
+  function deletePost(postId) {
+    if (!window.confirm('Delete this post?')) return;
+    api('DELETE', '/api/posts/' + postId, null, function (error) {
+      if (error) {
+        showToast(error.message);
+        return;
+      }
+      removePostUi(postId);
+      showToast('Post deleted');
+    });
+  }
+  function setAuthMode(mode) {
+    state.authMode = mode;
+    setText($('loginError'), '');
+    setText($('signupError'), '');
+    var loginTab = $('authLoginTab');
+    var signupTab = $('authSignupTab');
+    if (mode === 'login') {
+      loginTab.classList.add('is-active');
+      signupTab.classList.remove('is-active');
+      show($('loginForm'));
+      hide($('signupForm'));
+    } else {
+      signupTab.classList.add('is-active');
+      loginTab.classList.remove('is-active');
+      show($('signupForm'));
+      hide($('loginForm'));
+    }
+  }
+
+  function showAuth() {
+    resetForAuth();
+    hide($('mainScreen'));
+    show($('authScreen'));
+    setAuthMode('login');
+    window.scrollTo(0, 0);
+  }
+
+  function enterApp() {
+    hide($('authScreen'));
+    show($('mainScreen'));
+    paintAvatar($('topProfileBtn'), state.me.username);
+    paintAvatar($('composerAvatar'), state.me.username);
+    state.feedLoaded = false;
+    state.discoverLoaded = false;
+    state.feedDirty = false;
+    state.discoverDirty = false;
+    state.feedCursor = null;
+    state.discoverCursor = null;
+    state.profileData = null;
+    state.profileUsername = null;
+    navigate('feed');
+  }
+
+  function resetForAuth() {
+    if (state.searchTimer) {
+      clearTimeout(state.searchTimer);
+      state.searchTimer = null;
+    }
+    resetBusyButtons();
+    state.view = 'feed';
+    state.previousView = 'feed';
+    state.feedLoaded = false;
+    state.discoverLoaded = false;
+    state.feedDirty = false;
+    state.discoverDirty = false;
+    state.feedCursor = null;
+    state.discoverCursor = null;
+    state.feedHasMore = false;
+    state.discoverHasMore = false;
+    state.feedLoading = false;
+    state.discoverLoading = false;
+    state.feedSeq += 1;
+    state.discoverSeq += 1;
+    state.searchSeq += 1;
+    state.profileSeq += 1;
+    state.profileData = null;
+    state.profileUsername = null;
+    state.profileCursor = null;
+    state.profileHasMore = false;
+    clearPendingImage();
+    $('feedList').innerHTML = '';
+    $('discoverPeople').innerHTML = '';
+    $('discoverPosts').innerHTML = '';
+    $('searchResults').innerHTML = '';
+    $('profilePosts').innerHTML = '';
+    $('postText').value = '';
+    $('searchInput').value = '';
+    $('loginPassword').value = '';
+    $('signupPassword').value = '';
+    setText($('postError'), '');
+    hide($('feedEmpty'));
+    hide($('feedMoreWrap'));
+    hide($('discoverEmpty'));
+    hide($('discoverMoreWrap'));
+    hide($('profileEmpty'));
+    hide($('profileMoreWrap'));
+    closeModal();
+  }
+
+  function updateNav(view) {
+    var buttons = document.querySelectorAll('[data-nav]');
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].getAttribute('data-nav') === view) buttons[i].classList.add('is-active');
+      else buttons[i].classList.remove('is-active');
+    }
+  }
+
+  function navigate(view) {
+    if (view === 'profile') {
+      if (state.me) openProfile(state.me.username);
+      return;
+    }
+    state.view = view;
+    hide($('viewFeed'));
+    hide($('viewDiscover'));
+    hide($('viewSearch'));
+    hide($('viewProfile'));
+    if (view === 'feed') show($('viewFeed'));
+    else if (view === 'discover') show($('viewDiscover'));
+    else if (view === 'search') show($('viewSearch'));
+    updateNav(view);
+    window.scrollTo(0, 0);
+    if (view === 'feed' && !state.feedLoaded) loadFeed(true);
+    if (view === 'discover' && !state.discoverLoaded) loadDiscover(true);
+    if (view === 'search' && !$('searchResults').innerHTML) doSearch();
+    if (view === 'search') {
+      setTimeout(function () {
+        var input = $('searchInput');
+        if (input) input.focus();
+      }, 60);
+    }
+  }
+
+  function loadFeed(reset) {
+    if (state.feedLoading) {
+      if (reset) state.feedDirty = true;
+      return;
+    }
+    if (state.feedDirty && !reset) reset = true;
+    if (reset) {
+      state.feedDirty = false;
+      state.feedCursor = null;
+      state.feedHasMore = false;
+      hide($('feedMoreWrap'));
+      hide($('feedEmpty'));
+      $('feedList').innerHTML = '<div class="loading">Loading your feed...</div>';
+    }
+    state.feedLoading = true;
+    state.feedSeq += 1;
+    var seq = state.feedSeq;
+    api('GET', '/api/feed' + (state.feedCursor ? '?before=' + state.feedCursor : ''), null, function (error, data) {
+      if (seq !== state.feedSeq) return;
+      state.feedLoading = false;
+      if (error) {
+        if (reset) {
+          $('feedList').innerHTML = '<div class="card empty"><h3>Could not load your feed</h3><p>' + esc(error.message) + '</p></div>';
+        } else {
+          showToast(error.message);
+        }
+        return;
+      }
+      if (state.feedDirty) {
+        state.feedDirty = false;
+        state.feedLoaded = false;
+        if (state.view === 'feed') loadFeed(true);
+        return;
+      }
+      var posts = data.posts || [];
+      if (reset) $('feedList').innerHTML = '';
+      $('feedList').innerHTML += postsHtml(posts);
+      state.feedCursor = data.nextCursor;
+      state.feedHasMore = data.hasMore;
+      state.feedLoaded = true;
+      if (posts.length === 0) show($('feedEmpty'));
+      else hide($('feedEmpty'));
+      if (data.hasMore) show($('feedMoreWrap'));
+      else hide($('feedMoreWrap'));
+    });
+  }
+
+  function loadDiscover(reset) {
+    if (state.discoverLoading) {
+      if (reset) state.discoverDirty = true;
+      return;
+    }
+    if (state.discoverDirty && !reset) reset = true;
+    if (reset) {
+      state.discoverDirty = false;
+      state.discoverCursor = null;
+      state.discoverHasMore = false;
+      $('discoverPeople').innerHTML = '';
+      $('discoverPosts').innerHTML = '<div class="loading">Loading posts...</div>';
+      hide($('discoverMoreWrap'));
+      hide($('discoverEmpty'));
+    }
+    state.discoverLoading = true;
+    state.discoverSeq += 1;
+    var seq = state.discoverSeq;
+    api('GET', '/api/discover' + (state.discoverCursor ? '?before=' + state.discoverCursor : ''), null, function (error, data) {
+      if (seq !== state.discoverSeq) return;
+      state.discoverLoading = false;
+      if (error) {
+        if (reset) {
+          $('discoverPosts').innerHTML = '<div class="card empty"><h3>Could not load Discover</h3><p>' + esc(error.message) + '</p></div>';
+        } else {
+          showToast(error.message);
+        }
+        return;
+      }
+      if (state.discoverDirty) {
+        state.discoverDirty = false;
+        state.discoverLoaded = false;
+        if (state.view === 'discover') loadDiscover(true);
+        return;
+      }
+      if (reset) {
+        var people = data.people || [];
+        $('discoverPeople').innerHTML = peopleHtml(people);
+        if (people.length) show($('peopleHeading'));
+        else hide($('peopleHeading'));
+        $('discoverPosts').innerHTML = '';
+      }
+      var posts = data.posts || [];
+      $('discoverPosts').innerHTML += postsHtml(posts);
+      state.discoverCursor = data.nextCursor;
+      state.discoverHasMore = data.hasMore;
+      state.discoverLoaded = true;
+      if (reset && posts.length === 0) show($('discoverEmpty'));
+      else hide($('discoverEmpty'));
+      if (data.hasMore) show($('discoverMoreWrap'));
+      else hide($('discoverMoreWrap'));
+    });
+  }
+
+  function openProfile(username) {
+    if (!state.token) return;
+    closeModal();
+    state.profileSeq += 1;
+    var seq = state.profileSeq;
+    setBusy($('profileMoreBtn'), false);
+    if (state.view !== 'profile') state.previousView = state.view;
+    state.view = 'profile';
+    state.profileUsername = username;
+    state.profileData = null;
+    state.profileCursor = null;
+    state.profileHasMore = false;
+    hide($('viewFeed'));
+    hide($('viewDiscover'));
+    hide($('viewSearch'));
+    hide($('viewProfile'));
+    show($('viewProfile'));
+    updateNav('profile');
+    window.scrollTo(0, 0);
+
+    setText($('profileName'), username);
+    $('profileBadge').innerHTML = '';
+    setText($('profileBio'), '');
+    setText($('statPostCount'), '0');
+    setText($('statFanCount'), '0');
+    setText($('statFollowingCount'), '0');
+    hide($('profileFollowBtn'));
+    hide($('profileEditBtn'));
+    hide($('profileLogoutBtn'));
+    hide($('profileMoreWrap'));
+    hide($('profileEmpty'));
+    $('profilePosts').innerHTML = '<div class="loading">Loading profile...</div>';
+
+    api('GET', '/api/users/' + encodeURIComponent(username), null, function (error, data) {
+      if (seq !== state.profileSeq || state.profileUsername !== username) return;
+      if (error) {
+        $('profilePosts').innerHTML = '<div class="card empty"><h3>Could not load profile</h3><p>' + esc(error.message) + '</p></div>';
+        return;
+      }
+      renderProfile(data);
+    });
+  }
+
+  function renderProfile(data) {
+    var user = data.user;
+    state.profileData = data;
+    state.profileCursor = data.nextCursor;
+    state.profileHasMore = data.hasMore;
+
+    paintAvatar($('profileAvatar'), user.username);
+    setText($('profileName'), user.username);
+    $('profileBadge').innerHTML = ageBadge(user.ageGroup);
+    setText($('profileBio'), user.bio || (user.isMe ? 'Add a short bio so people know you.' : 'No bio yet.'));
+    setText($('statPostCount'), String(user.postCount || 0));
+    setText($('statFanCount'), String(user.fanCount || 0));
+    setText($('statFollowingCount'), String(user.followingCount || 0));
+
+    if (user.isMe) {
+      hide($('profileFollowBtn'));
+      show($('profileEditBtn'));
+      show($('profileLogoutBtn'));
+    } else {
+      show($('profileFollowBtn'));
+      hide($('profileEditBtn'));
+      hide($('profileLogoutBtn'));
+      updateProfileFollowButton();
+    }
+
+    $('profilePosts').innerHTML = postsHtml(data.posts || []);
+    if (data.posts && data.posts.length) hide($('profileEmpty'));
+    else show($('profileEmpty'));
+    if (data.hasMore) show($('profileMoreWrap'));
+    else hide($('profileMoreWrap'));
+  }
+
+  function loadProfileMore() {
+    if (!state.profileUsername || !state.profileCursor) return;
+    var button = $('profileMoreBtn');
+    if (isBusy(button)) return;
+    var username = state.profileUsername;
+    var seq = state.profileSeq;
+    setBusy(button, true, 'Loading...');
+    api('GET', '/api/users/' + encodeURIComponent(username) + '/posts?before=' + state.profileCursor, null, function (error, data) {
+      if (seq !== state.profileSeq || state.profileUsername !== username) return;
+      setBusy(button, false);
+      if (error) {
+        showToast(error.message);
+        return;
+      }
+      var posts = data.posts || [];
+      $('profilePosts').innerHTML += postsHtml(posts);
+      state.profileCursor = data.nextCursor;
+      state.profileHasMore = data.hasMore;
+      if (data.hasMore) show($('profileMoreWrap'));
+      else hide($('profileMoreWrap'));
+    });
+  }
+
+  function openModal(title, bodyHtml) {
+    state.modalSeq += 1;
+    setText($('modalTitle'), title);
+    $('modalBody').innerHTML = bodyHtml;
+    show($('modal'));
+  }
+
+  function closeModal() {
+    state.modalSeq += 1;
+    hide($('modal'));
+    $('modalBody').innerHTML = '';
+  }
+
+  function openFanList(username, kind) {
+    var title = kind === 'fans' ? 'Fans of @' + username : 'People @' + username + ' follows';
+    openModal(title, '<div class="loading">Loading...</div>');
+    var seq = state.modalSeq;
+    api('GET', '/api/users/' + encodeURIComponent(username) + '/' + kind, null, function (error, data) {
+      if (seq !== state.modalSeq) return;
+      if (error) {
+        $('modalBody').innerHTML = '<div class="empty">' + esc(error.message) + '</div>';
+        return;
+      }
+      var users = data.users || [];
+      if (!users.length) {
+        $('modalBody').innerHTML = '<div class="empty">' + (kind === 'fans' ? 'No fans yet.' : 'Not following anyone yet.') + '</div>';
+        return;
+      }
+      var html = '<div class="user-list">';
+      for (var i = 0; i < users.length; i++) html += userRowHtml(users[i]);
+      html += '</div>';
+      $('modalBody').innerHTML = html;
+    });
+  }
+
+  function openEditProfile() {
+    if (!state.me) return;
+    var html = '<form id="editProfileForm" class="modal-form">';
+    html += '<label class="field"><span>Bio</span><textarea id="editBio" class="input" maxlength="160" placeholder="Tell people a little about yourself">' + esc(state.me.bio || '') + '</textarea></label>';
+    html += '<label class="field"><span>I am a</span><select id="editAge" class="input">';
+    html += '<option value="kid"' + (state.me.ageGroup === 'kid' ? ' selected' : '') + '>Kid</option>';
+    html += '<option value="teen"' + (state.me.ageGroup === 'teen' ? ' selected' : '') + '>Teen</option>';
+    html += '<option value="adult"' + (state.me.ageGroup === 'adult' ? ' selected' : '') + '>Adult</option>';
+    html += '</select></label>';
+    html += '<p id="editError" class="form-error"></p>';
+    html += '<button type="submit" id="editSaveBtn" class="btn btn-primary btn-block">Save profile</button>';
+    html += '</form>';
+    openModal('Edit profile', html);
+    on($('editProfileForm'), 'submit', function (event) {
+      event.preventDefault();
+      saveProfile();
+    });
+  }
+
+  function saveProfile() {
+    var button = $('editSaveBtn');
+    if (isBusy(button)) return;
+    var bio = $('editBio').value.trim();
+    var ageGroup = $('editAge').value;
+    setText($('editError'), '');
+    setBusy(button, true, 'Saving...');
+    api('PATCH', '/api/me', { bio: bio, ageGroup: ageGroup }, function (error, data) {
+      setBusy(button, false);
+      if (error) {
+        setText($('editError'), error.message);
+        return;
+      }
+      state.me = data.user;
+      markFeedDirty();
+      markDiscoverDirty();
+      closeModal();
+      showToast('Profile updated');
+      if (state.profileUsername && state.profileData && state.profileData.user.isMe) {
+        openProfile(state.me.username);
+      }
+    });
+  }
+
+  function clearPendingImage() {
+    state.photoSeq += 1;
+    state.pendingImage = null;
+    state.imageBusy = false;
+    var preview = $('imagePreview');
+    if (preview) preview.removeAttribute('src');
+    hide($('imagePreviewWrap'));
+    var input = $('photoInput');
+    if (input) {
+      try {
+        input.value = '';
+      } catch (error) {}
+    }
+  }
+
+  function resizePhoto(image) {
+    var maxSide = 1080;
+    var width = image.width || image.naturalWidth;
+    var height = image.height || image.naturalHeight;
+    if (!width || !height) {
+      state.imageBusy = false;
+      setText($('postError'), 'Could not read that photo.');
+      return;
+    }
+    var scale = Math.min(1, maxSide / Math.max(width, height));
+    var canvasWidth = Math.max(1, Math.round(width * scale));
+    var canvasHeight = Math.max(1, Math.round(height * scale));
+    var canvas = document.createElement('canvas');
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    var context = canvas.getContext('2d');
+    if (!context) {
+      state.imageBusy = false;
+      setText($('postError'), 'Your browser could not prepare that photo.');
+      return;
+    }
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, canvasWidth, canvasHeight);
+    try {
+      context.drawImage(image, 0, 0, canvasWidth, canvasHeight);
+    } catch (error) {
+      state.imageBusy = false;
+      setText($('postError'), 'Could not prepare that photo.');
+      return;
+    }
+    var dataUrl = '';
+    try {
+      dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+    } catch (error) {}
+    if (dataUrl.length > 4200000) {
+      try {
+        dataUrl = canvas.toDataURL('image/jpeg', 0.62);
+      } catch (error) {
+        dataUrl = '';
+      }
+    }
+    if (!dataUrl) {
+      state.imageBusy = false;
+      setText($('postError'), 'Could not prepare that photo.');
+      return;
+    }
+    if (dataUrl.indexOf('data:image/jpeg') !== 0) {
+      state.imageBusy = false;
+      setText($('postError'), 'Could not prepare that photo.');
+      return;
+    }
+    if (dataUrl.length > 4800000) {
+      state.imageBusy = false;
+      setText($('postError'), 'That photo is too large. Try a smaller one.');
+      return;
+    }
+    state.imageBusy = false;
+    state.pendingImage = dataUrl;
+    $('imagePreview').src = dataUrl;
+    show($('imagePreviewWrap'));
+    setText($('postError'), '');
+  }
+
+  function handlePhoto(file) {
+    if (!file) return;
+    state.photoSeq += 1;
+    var seq = state.photoSeq;
+    var type = file.type || '';
+    var name = (file.name || '').toLowerCase();
+    if (type.indexOf('image/') !== 0 && !/\.(jpe?g|png|gif|webp)$/.test(name)) {
+      state.imageBusy = false;
+      setText($('postError'), 'Choose a JPEG, PNG, GIF, or WebP photo.');
+      return;
+    }
+    if (file.size > 12 * 1024 * 1024) {
+      state.imageBusy = false;
+      setText($('postError'), 'That photo is too large. Pick one under 12 MB.');
+      return;
+    }
+    setText($('postError'), 'Preparing photo...');
+    state.imageBusy = true;
+    var objectUrl = null;
+    var urlImpl = window.URL || window.webkitURL;
+    if (urlImpl && urlImpl.createObjectURL) {
+      try {
+        objectUrl = urlImpl.createObjectURL(file);
+      } catch (error) {
+        objectUrl = null;
+      }
+    }
+    var image = new Image();
+    image.onload = function () {
+      if (objectUrl && urlImpl.revokeObjectURL) urlImpl.revokeObjectURL(objectUrl);
+      if (seq !== state.photoSeq) return;
+      resizePhoto(image);
+    };
+    image.onerror = function () {
+      if (objectUrl && urlImpl.revokeObjectURL) urlImpl.revokeObjectURL(objectUrl);
+      if (seq !== state.photoSeq) return;
+      state.imageBusy = false;
+      setText($('postError'), 'Could not read that photo.');
+    };
+    if (objectUrl) {
+      image.src = objectUrl;
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function (event) {
+      if (seq !== state.photoSeq) return;
+      image.src = event.target.result;
+    };
+    reader.onerror = function () {
+      if (seq !== state.photoSeq) return;
+      state.imageBusy = false;
+      setText($('postError'), 'Could not read that photo.');
+    };
+    reader.readAsDataURL(file);
+  }
+  function submitPost() {
+    var button = $('postBtn');
+    if (isBusy(button)) return;
+    if (state.imageBusy) {
+      setText($('postError'), 'Wait for the photo to finish preparing.');
+      return;
+    }
+    var text = $('postText').value;
+    var image = state.pendingImage;
+    if (!text.replace(/\s/g, '') && !image) {
+      setText($('postError'), 'Write something or add a photo.');
+      return;
+    }
+    if (text.length > 1000) {
+      setText($('postError'), 'Posts can be up to 1,000 characters.');
+      return;
+    }
+    setText($('postError'), '');
+    setBusy(button, true, 'Posting...');
+    api('POST', '/api/posts', { text: text, image: image }, function (error, data) {
+      setBusy(button, false);
+      if (error) {
+        setText($('postError'), error.message);
+        return;
+      }
+      if ($('postText').value === text) $('postText').value = '';
+      if (state.pendingImage === image) clearPendingImage();
+      state.me.postCount = (state.me.postCount || 0) + 1;
+      markDiscoverDirty();
+      markFeedDirty();
+      if (state.view === 'feed') {
+        var list = $('feedList');
+        var holder = document.createElement('div');
+        holder.innerHTML = postHtml(data.post);
+        if (holder.firstChild) list.insertBefore(holder.firstChild, list.firstChild);
+        hide($('feedEmpty'));
+      }
+      showToast('Posted');
+    });
+  }
+
+  function doSearch() {
+    var input = $('searchInput');
+    var query = input.value.trim();
+    if (state.searchTimer) {
+      clearTimeout(state.searchTimer);
+      state.searchTimer = null;
+    }
+    if (!query) {
+      state.searchSeq += 1;
+      $('searchResults').innerHTML = '<div class="card empty"><h3>Search Rise</h3><p>Find people by username or posts by their text.</p></div>';
+      return;
+    }
+    state.searchSeq += 1;
+    var seq = state.searchSeq;
+    $('searchResults').innerHTML = '<div class="card loading">Searching...</div>';
+    api('GET', '/api/search?q=' + encodeURIComponent(query), null, function (error, data) {
+      if (seq !== state.searchSeq) return;
+      if (error) {
+        $('searchResults').innerHTML = '<div class="card empty"><h3>Search failed</h3><p>' + esc(error.message) + '</p></div>';
+        return;
+      }
+      renderSearch(data, query);
+    });
+  }
+
+  function scheduleSearch() {
+    state.searchSeq += 1;
+    if (state.searchTimer) clearTimeout(state.searchTimer);
+    state.searchTimer = setTimeout(function () {
+      state.searchTimer = null;
+      doSearch();
+    }, 350);
+  }
+
+  function renderSearch(data, query) {
+    var html = '';
+    var users = data.users || [];
+    var posts = data.posts || [];
+    if (users.length) {
+      html += '<h2 class="section-title">People</h2><div class="card user-list">';
+      for (var i = 0; i < users.length; i++) html += userRowHtml(users[i]);
+      html += '</div>';
+    }
+    if (posts.length) {
+      html += '<h2 class="section-title">Posts</h2><div class="post-list">' + postsHtml(posts) + '</div>';
+    }
+    if (!html) {
+      html = '<div class="card empty"><h3>No results</h3><p>Nothing found for "' + esc(query) + '".</p></div>';
+    }
+    $('searchResults').innerHTML = html;
+  }
+
+  function logout() {
+    api('POST', '/api/logout', {}, function () {
+      clearSession();
+      showAuth();
+    });
+  }
+
+  function wireAuth() {
+    on($('authLoginTab'), 'click', function () {
+      setAuthMode('login');
+    });
+    on($('authSignupTab'), 'click', function () {
+      setAuthMode('signup');
+    });
+    on($('loginForm'), 'submit', function (event) {
+      event.preventDefault();
+      submitLogin();
+    });
+    on($('signupForm'), 'submit', function (event) {
+      event.preventDefault();
+      submitSignup();
+    });
+  }
+
+  function submitLogin() {
+    var button = $('loginBtn');
+    if (isBusy(button)) return;
+    var username = $('loginUsername').value.trim();
+    var password = $('loginPassword').value;
+    setText($('loginError'), '');
+    if (!username || !password) {
+      setText($('loginError'), 'Enter your username and password.');
+      return;
+    }
+    setBusy(button, true, 'Logging in...');
+    api('POST', '/api/login', { username: username, password: password }, function (error, data) {
+      setBusy(button, false);
+      if (error) {
+        setText($('loginError'), error.message);
+        return;
+      }
+      $('loginPassword').value = '';
+      saveSession(data.token, data.user);
+      enterApp();
+    });
+  }
+
+  function submitSignup() {
+    var button = $('signupBtn');
+    if (isBusy(button)) return;
+    var username = $('signupUsername').value.trim();
+    var password = $('signupPassword').value;
+    var ageGroup = $('signupAge').value;
+    setText($('signupError'), '');
+    if (!username || !password) {
+      setText($('signupError'), 'Pick a username and password.');
+      return;
+    }
+    setBusy(button, true, 'Creating account...');
+    api('POST', '/api/signup', { username: username, password: password, ageGroup: ageGroup }, function (error, data) {
+      setBusy(button, false);
+      if (error) {
+        setText($('signupError'), error.message);
+        return;
+      }
+      $('signupPassword').value = '';
+      saveSession(data.token, data.user);
+      enterApp();
+    });
+  }
+
+  function wireApp() {
+    on($('homeBtn'), 'click', function () {
+      navigate('feed');
+    });
+    on($('topProfileBtn'), 'click', function () {
+      if (state.me) openProfile(state.me.username);
+    });
+    on($('logoutBtn'), 'click', logout);
+    on($('profileLogoutBtn'), 'click', logout);
+
+    var navButtons = document.querySelectorAll('[data-nav]');
+    for (var i = 0; i < navButtons.length; i++) {
+      on(navButtons[i], 'click', function () {
+        navigate(this.getAttribute('data-nav'));
+      });
+    }
+
+    on($('photoInput'), 'change', function () {
+      var file = this.files && this.files[0];
+      handlePhoto(file);
+    });
+    on($('removeImageBtn'), 'click', clearPendingImage);
+    on($('postBtn'), 'click', submitPost);
+    on($('postText'), 'keydown', function (event) {
+      if ((event.ctrlKey || event.metaKey) && event.keyCode === 13) {
+        event.preventDefault();
+        submitPost();
+      }
+    });
+    on($('feedMoreBtn'), 'click', function () {
+      loadFeed(false);
+    });
+    on($('discoverMoreBtn'), 'click', function () {
+      loadDiscover(false);
+    });
+
+    on($('searchBtn'), 'click', doSearch);
+    on($('searchInput'), 'input', scheduleSearch);
+    on($('searchInput'), 'keydown', function (event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        doSearch();
+      }
+    });
+
+    on($('profileBackBtn'), 'click', function () {
+      navigate(state.previousView || 'feed');
+    });
+    on($('profileEditBtn'), 'click', openEditProfile);
+    on($('profileFansBtn'), 'click', function () {
+      if (state.profileUsername) openFanList(state.profileUsername, 'fans');
+    });
+    on($('profileFollowingBtn'), 'click', function () {
+      if (state.profileUsername) openFanList(state.profileUsername, 'following');
+    });
+    on($('profileMoreBtn'), 'click', loadProfileMore);
+
+    on($('modalCloseBtn'), 'click', closeModal);
+    on($('modalBackdrop'), 'click', closeModal);
+
+    document.addEventListener('click', function (event) {
+      var profileNode = closestAttr(event.target, 'data-profile');
+      if (profileNode) {
+        event.preventDefault();
+        openProfile(profileNode.getAttribute('data-profile'));
+        return;
+      }
+      var likeNode = closestAttr(event.target, 'data-like');
+      if (likeNode) {
+        event.preventDefault();
+        toggleLike(likeNode.getAttribute('data-like'), likeNode);
+        return;
+      }
+      var deleteNode = closestAttr(event.target, 'data-delete');
+      if (deleteNode) {
+        event.preventDefault();
+        deletePost(deleteNode.getAttribute('data-delete'));
+        return;
+      }
+      var fanNode = closestAttr(event.target, 'data-fan');
+      if (fanNode) {
+        event.preventDefault();
+        toggleFan(fanNode.getAttribute('data-fan'), fanNode);
+        return;
+      }
+    }, false);
+  }
+
+  function boot() {
+    wireAuth();
+    wireApp();
+    var stored = readStoredToken();
+    if (!stored) {
+      showAuth();
+      return;
+    }
+    state.token = stored;
+    api('GET', '/api/me', null, function (error, data) {
+      if (error) {
+        clearSession();
+        showAuth();
+        return;
+      }
+      state.me = data.user;
+      enterApp();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, false);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>

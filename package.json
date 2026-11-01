@@ -1,0 +1,16 @@
+{
+  "name": "rise-social",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Rise is a text and photo social network with fans, likes, feeds, profiles, and search.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "pg": "^8.23.1"
+  }
+}
